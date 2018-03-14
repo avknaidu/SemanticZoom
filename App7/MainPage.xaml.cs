@@ -29,7 +29,7 @@ namespace App7
     public class ItemViewModel
     {
         public ObservableCollection<Items> MyList { get; set; }
-        public IList<Items> Groups { get; } = new List<Items>();
+        public object Groups { get; }
 
         public ItemViewModel()
         {
@@ -42,12 +42,9 @@ namespace App7
                     item.ItemHeader = "Header" + i.ToString();
                     item.ItemValue = "Value" + j.ToString();
                     MyList.Add(item);
-                    if (!Groups.Any(g => g.ItemHeader == item.ItemHeader))
-                    {
-                        Groups.Add(item);
-                    }
                 }
             }
+            Groups = from t in MyList group t by t.ItemHeader into g orderby g.Key select g;
         }
     }
 

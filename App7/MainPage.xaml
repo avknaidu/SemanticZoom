@@ -1,24 +1,23 @@
 ﻿<Page
     x:Class="App7.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:App7"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:wuxdata="using:Windows.UI.Xaml.Data"
+    xmlns:local="using:App7"
     mc:Ignorable="d">
 
     <Page.Resources>
-        <DataTemplate x:Key="ZoomedInGroupHeaderTemplate" x:DataType="local:Items">
-            <TextBlock Text="{x:Bind ItemHeader}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}" Style="{StaticResource SubtitleTextBlockStyle}"/>
+        <DataTemplate x:Key="ZoomedInGroupHeaderTemplate">
+            <TextBlock Text="{Binding Key}" Foreground="{ThemeResource ApplicationForegroundThemeBrush}" Style="{StaticResource SubtitleTextBlockStyle}"/>
         </DataTemplate>
-        <DataTemplate x:Key="ZoomedInTemplate" x:DataType="local:Items">
+        <DataTemplate x:Key="ZoomedInTemplate">
             <StackPanel Orientation="Vertical" MinWidth="200" Margin="12,6,12,6">
-                <TextBlock Text="{x:Bind ItemHeader}" Style="{StaticResource BaseTextBlockStyle}"/>
-                <TextBlock Text="{x:Bind ItemValue}" TextWrapping="Wrap" HorizontalAlignment="Left" Width="300" Style="{StaticResource BodyTextBlockStyle}"/>
+                <TextBlock Text="{Binding ItemHeader}" Style="{StaticResource BaseTextBlockStyle}"/>
+                <TextBlock Text="{Binding ItemValue}" TextWrapping="Wrap" HorizontalAlignment="Left" Width="300" Style="{StaticResource BodyTextBlockStyle}"/>
             </StackPanel>
         </DataTemplate>
-        <CollectionViewSource x:Name="cvsGroups" Source="{x:Bind itemViewModel.Groups}" IsSourceGrouped="True" ItemsPath="MyList" />
+        <CollectionViewSource x:Name="cvsGroups" Source="{x:Bind itemViewModel.Groups}" IsSourceGrouped="True" />
     </Page.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -26,7 +25,7 @@
             
             <SemanticZoom.ZoomedInView>
                 <GridView ScrollViewer.IsVerticalScrollChainingEnabled="False" ScrollViewer.IsHorizontalScrollChainingEnabled="False" 
-                          ItemsSource="{x:Bind cvsGroups.View}" GotFocus="GridView_GotFocus" ItemTemplate="{StaticResource ZoomedInTemplate}">
+                          ItemsSource="{Binding Source={StaticResource cvsGroups}}" GotFocus="GridView_GotFocus" ItemTemplate="{StaticResource ZoomedInTemplate}">
                     <GridView.GroupStyle>
                         <GroupStyle HeaderTemplate="{StaticResource ZoomedInGroupHeaderTemplate}" />
                     </GridView.GroupStyle>
@@ -35,10 +34,10 @@
             
             <SemanticZoom.ZoomedOutView>
                 <ListView ScrollViewer.IsVerticalScrollChainingEnabled="False" ScrollViewer.IsHorizontalScrollChainingEnabled="False" 
-                          ItemsSource="{x:Bind cvsGroups.View.CollectionGroups}" SelectionMode="None">
+                          SelectionMode="None" ItemsSource="{x:Bind cvsGroups.View.CollectionGroups}">
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="ICollectionViewGroup">
-                            <TextBlock Text="{x:Bind Group.(local:Items.ItemHeader)}" Style="{StaticResource SubtitleTextBlockStyle}" TextWrapping="Wrap"/>
+                        <DataTemplate x:DataType="local:Items">
+                            <TextBlock Text="{Binding Group.Key}" Style="{StaticResource SubtitleTextBlockStyle}" TextWrapping="Wrap"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
